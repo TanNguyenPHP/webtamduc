@@ -1,11 +1,12 @@
 <?php
 
-namespace Webtamduc\Frontend;
+namespace Coredev\Frontend;
 
 use Phalcon\DiInterface;
 use Phalcon\Loader;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\ModuleDefinitionInterface;
+use Phalcon\Config;
 
 
 class Module implements ModuleDefinitionInterface
@@ -21,8 +22,8 @@ class Module implements ModuleDefinitionInterface
         $loader = new Loader();
 
         $loader->registerNamespaces(array(
-            'Webtamduc\Frontend\Controllers' => __DIR__ . '/controllers/',
-            'Webtamduc\Frontend\Models' => __DIR__ . '/models/',
+            'Coredev\Frontend\Controllers' => __DIR__ . '/controllers/',
+            'Coredev\Modeldb\Entity' => __DIR__ . '/models/',
         ));
 
         $loader->register();
@@ -38,7 +39,7 @@ class Module implements ModuleDefinitionInterface
         /**
          * Read configuration
          */
-        $config = include APP_PATH . "/apps/frontend/config/config.php";
+        $config = include APP_PATH . "/config/configs/frontend.php";
 
         /**
          * Setting up the view component

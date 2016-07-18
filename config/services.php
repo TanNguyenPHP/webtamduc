@@ -26,8 +26,16 @@ $di->setShared('router', function () {
     $router = new Router();
 
     $router->setDefaultModule('frontend');
-    $router->setDefaultNamespace('Webtamduc\Frontend\Controllers');
-
+    $router->setDefaultNamespace('Coredev\Frontend\Controllers');
+    $router->add(
+        '/quanly',
+        array(
+            'module' => 'backend',
+            'namespace' => 'Coredev\Backend\Controllers',
+            'controller' => 'login',
+            'action' => 'index'
+        )
+    );
     return $router;
 });
 
@@ -114,7 +122,35 @@ $di->set('flash', function () {
 * Set the default namespace for dispatcher
 */
 $di->setShared('dispatcher', function() use ($di) {
-    $dispatcher = new Phalcon\Mvc\Dispatcher();
-    $dispatcher->setDefaultNamespace('Webtamduc\Frontend\Controllers');
+    $eventsManager = new \Phalcon\Events\Manager();
+
+    $eventsManager->attach("dispatch:beforeException", function($event, $dispatcher, $exception) {
+
+        //Handle 404 exceptions
+        if ($exception instanceof \Phalcon\Mvc\Dispatcher\Exception) {
+            $dispatcher->forward(array(
+                'controller' => 'index',
+                'action' => 'index'
+            ));
+            return false;
+        }
+
+        //Handle other exceptions
+        $dispatcher->forward(array(
+            'controller' => 'index',
+            'action' => 'index'
+        ));
+
+        return false;
+    });
+
+    $dispatcher = new \Phalcon\Mvc\Dispatcher();
+
+    //Bind the EventsManager to the dispatcher
+    $dispatcher->setEventsManager($eventsManager);
+
     return $dispatcher;
+    //$dispatcher = new Phalcon\Mvc\Dispatcher();
+    //$dispatcher->setDefaultNamespace('Coredev\Frontend\Controllers');
+    //return $dispatcher;
 });

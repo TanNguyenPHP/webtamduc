@@ -21,8 +21,8 @@ class Module implements ModuleDefinitionInterface
         $loader = new Loader();
 
         $loader->registerNamespaces(array(
-            'Coredev\Backend\Controllers' => __DIR__ . '/controllers/',
-            'Coredev\Backend\Models'      => __DIR__ . '/models/'
+            'Coredev\Backend\Controllers' => '../apps/backend/controllers/',
+            'Coredev\Modeldb\Entity' => '../apps/modeldb/entity/'
         ));
 
         $loader->register();
@@ -35,24 +35,7 @@ class Module implements ModuleDefinitionInterface
      */
     public function registerServices(DiInterface $di)
     {
-        /**
-         * Read common configuration
-         */
-         $config = $di->has('config') ? $di->getShared('config') : null;
-
-        /**
-         * Try to load local configuration
-         */
-        if (file_exists(__DIR__ . '/config/config.php')) {
-            $override = new Config(include __DIR__ . '/config/config.php');;
-
-            if ($config instanceof Config) {
-                $config->merge($override);
-            } else {
-                $config = $override;
-            }
-        }
-
+        $config = include APP_PATH . "/config/configs/backend.php";
         /**
          * Setting up the view component
          */

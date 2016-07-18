@@ -1,6 +1,6 @@
 <?php
 
-namespace Webtamduc\Frontend\Controllers;
+namespace Coredev\Frontend\Controllers;
 
 use Phalcon\Mvc\Controller;
 

@@ -11,7 +11,7 @@ try {
     /**
      * Read the configuration
      */
-    $config = include APP_PATH . "/apps/frontend/config/config.php";
+    $config = include APP_PATH . "/config/configs/frontend.php";
 
     /**
      * Include services

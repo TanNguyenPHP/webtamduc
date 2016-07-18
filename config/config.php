@@ -1,12 +1,17 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: SONY
+ * Date: 16-07-2016
+ * Time: 6:45 PM
+ */
 return new \Phalcon\Config(array(
     'database' => array(
         'adapter'  => 'Mysql',
         'host'     => 'localhost',
         'username' => 'root',
-        'password' => '',
-        'dbname'   => 'webtamduc',
+        'password' => 'sonic1988',
+        'dbname'   => 'dbtamduc',
         'charset'  => 'utf8',
     ),
     'application' => array(
@@ -14,6 +19,6 @@ return new \Phalcon\Config(array(
         'modelsDir'      => __DIR__ . '/../models/',
         'migrationsDir'  => __DIR__ . '/../migrations/',
         'viewsDir'       => __DIR__ . '/../views/',
-        'baseUri'        => '/webtamduc/'
+        'baseUri'        => ''
     )
 ));
