@@ -3,7 +3,7 @@ namespace Coredev\Modeldb\Entity;
 
 use Phalcon\Mvc\Model;
 
-class Users extends Model
+class Posts extends Model
 {
 
     /**
@@ -16,25 +16,55 @@ class Users extends Model
      *
      * @var string
      */
-    public $username;
+    public $title;
 
     /**
      *
      * @var string
      */
-    public $password;
+    public $content;
 
     /**
      *
      * @var string
      */
-    public $datecreate;
+    public $content_short;
 
     /**
      *
      * @var string
      */
-    public $is_active;
+    public $seo_title;
+
+    /**
+     *
+     * @var string
+     */
+    public $seo_desc;
+
+    /**
+     *
+     * @var string
+     */
+    public $seo_keyword;
+
+    /**
+     *
+     * @var string
+     */
+    public $url;
+
+    /**
+     *
+     * @var integer
+     */
+    public $id_lang;
+
+    /**
+     *
+     * @var string
+     */
+    public $is_status;
 
     /**
      *
@@ -46,44 +76,43 @@ class Users extends Model
      *
      * @var string
      */
-    public $room;
+    public $position;
 
     /**
      *
      * @var string
      */
-    public $desc;
+    public $is_home;
+
+    /**
+     *
+     * @var integer
+     */
+    public $id_category;
 
     /**
      *
      * @var string
      */
-    public $group;
+    public $avatar_image;
 
     /**
      *
      * @var string
      */
-    public $email;
+    public $datecreate;
 
     /**
      *
      * @var string
      */
-    public $address;
+    public $id_user;
 
     /**
      *
      * @var string
      */
-    public $name;
-
-    /**
-     *
-     * @var string
-     */
-    public $dob;
-    public $id_group;
+    public $slug;
 
     /**
      * Returns table name mapped in the model.
@@ -92,14 +121,14 @@ class Users extends Model
      */
     public function getSource()
     {
-        return 'users';
+        return 'posts';
     }
 
     /**
      * Allows to query a set of records that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Users[]
+     * @return Posts[]
      */
     public static function find($parameters = null)
     {
@@ -110,16 +139,16 @@ class Users extends Model
      * Allows to query the first record that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Users
+     * @return Posts
      */
     public static function findFirst($parameters = null)
     {
         return parent::findFirst($parameters);
     }
 
-    public static function findUsersPaging($name, $page, $limit)
+    public static function findPostsPaging($title = '', $is_home = '', $is_status = '', $page = '', $limit = '')
     {
-        $queryBuilder = new \Phalcon\Mvc\Model\Query\Builder(self::buildparams($name, $page, $limit));
+        $queryBuilder = new \Phalcon\Mvc\Model\Query\Builder(self::buildparams($title, $is_home, $is_status));
 
         $paginator = new \Phalcon\Paginator\Adapter\QueryBuilder(array(
             "builder" => $queryBuilder,
@@ -130,18 +159,22 @@ class Users extends Model
         return $paginator->getPaginate();
     }
 
-    private static function buildparams($name, $page, $limit)
+    private static function buildparams($title, $is_home, $is_status)
     {
         $conditions = '1=1';
-        if ($name != '')
-            $conditions = $conditions . " and u.username like '%$name%' or u.name like '%$name%'";
+        if ($title != '')
+            $conditions = $conditions . " and p.title like '%$title%'";
+        if ($is_home != '')
+            $conditions = $conditions . " and p.is_home = '$is_home'";
+        if ($is_status != '')
+            $conditions = $conditions . " and p.is_status = '$is_status'";
         return $params = array(
-            'models' => array('u' => 'Coredev\Modeldb\Entity\Users'),
-            'columns' => array('u.id', 'u.username', 'u.name', 'u.is_active', 'u.datecreate', 'g.name gname'),
-            'joins' => array('0' => array('Coredev\Modeldb\Entity\RoleGroup', 'g.id = u.id_group', 'g', 'left')),
+            'models' => array('p' => 'Coredev\Modeldb\Entity\Posts'),
+            'columns' => array('p.id', 'p.title', 'p.is_home', 'p.is_status', 'p.datecreate', 'c.name categoryname'),
+            'joins' => array('0' => array('Coredev\Modeldb\Entity\Category', 'c.id = p.id_category', 'c', 'left')),
             'conditions' => $conditions,
             // or 'conditions' => "created > '2013-01-01' AND created < '2014-01-01'",
-            'order' => 'u.name'
+            'order' => 'p.datecreate desc,p.title '
             // or 'limit' => array(20, 20),
         );
     }

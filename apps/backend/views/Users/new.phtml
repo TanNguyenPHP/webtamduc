@@ -1,0 +1,110 @@
+<?php echo $this->getContent(); ?>
+<section class="content-header">
+    <h1>
+        Tạo mới tài khoản
+        <small>Version 1.0</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Tạo mới tài khoản</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="row">
+        <p><?php echo $this->flash->output() ?></p>
+        <div class="col-md-6">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Thông tin tài khoản</h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form class="form-horizontal" action="/backend/users/create" id="createform" method="post">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="" class="col-sm-3 control-label">Tên đăng nhập</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Tên đăng nhập..." maxlength="32">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-3 control-label">Mật khẩu</label>
+                            <div class="col-sm-9">
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Mật khẩu..." maxlength="32">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-3 control-label">Nhập lại mật khẩu</label>
+                            <div class="col-sm-9">
+                                <input type="password" class="form-control" id="repassword" name="repassword" placeholder="Nhập lại mật khẩu..." maxlength="32">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-3 control-label">Nhóm người dùng</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" name="id_group">
+                                    <option value="0">Chọn nhóm</option>
+                                    <?php foreach($data['rolegroup'] as $item ): ?>
+                                        <option value="<?php echo $item->id ?>"><?php echo $item->name ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-5">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="is_active">Kích hoạt tài khoản
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <a href="/backend/users/index" class="btn btn-default">Hủy</a>
+                        <button type="submit" class="btn btn-primary pull-right">Lưu</button>
+                    </div>
+                    <!-- /.box-footer -->
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    $().ready(function () {
+        // validate signup form on keyup and submit
+        $("#createform").validate({
+            rules: {
+                username: {
+                    required: true,
+                    minlength: 6
+                },
+                password: {
+                    required: true,
+                    minlength: 6
+                },
+                repassword: {
+                    required: true,
+                    minlength: 5,
+                    equalTo: "#password"
+                }
+            },
+            messages: {
+                username: {
+                    required: "Điền tên đăng nhập",
+                    minlength: "Tên đăng nhập lớn hơn 5 ký tự"
+                },
+                password: {
+                    required: "Nhập mật khẩu",
+                    minlength: "Mật khẩu phải lớn hơn 5 ký tự"
+                },
+                repassword: {
+                    required: "Nhập lại mật khẩu",
+                    minlength: "Mật khẩu phải lớn hơn 5 ký tự",
+                    equalTo: "Mật khậu nhập lại không đúng"
+                }
+            }
+        });
+    });
+</script>

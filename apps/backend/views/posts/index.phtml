@@ -1,0 +1,191 @@
+<section class="content-header">
+    <h1>
+        Danh sách bài viết
+        <small>Version 1.0</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Danh sách bài viết</li>
+    </ol>
+</section>
+<?php
+echo $this->tag->form(
+    array(
+        "/backend/posts/index",
+        "autocomplete" => "off",
+        "class" => "form-horizontal",
+        "name" => "usersform",
+        "method" => "get"
+    )
+);
+?>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a href="/backend/posts/new" class="btn btn-primary">
+                                <i class="fa fa-plus-square-o"></i> Tạo mới bài viết
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <div class="input-group">
+                                <span class="input-group-btn"><button type="submit" class="btn btn-primary btn-flat">
+                                        Tìm
+                                    </button>
+                                  </span>
+                                <input type="text" name="filter" id="filter" placeholder="Nhập tên..."
+                                       class="form-control" value="<?php echo $data['filter']?>">
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="input-group">
+                                <span class="input-group-btn"><label class="btn btn-primary btn-flat">
+                                        Hiển thị
+                                    </label>
+                                  </span>
+                                <select class="form-control">
+                                    <?php for ($i = 50; $i <= 100; $i = $i + 50) {
+                                        if ($i == $data['limit'])
+                                            echo "<option value=\"$i\" selected>$i</option>";
+                                        else
+                                            echo "<option value=\"$i\">$i</option>";
+                                    } ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Danh sách tài khoản</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="postsdata" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Tiêu đề</th>
+                            <th>Danh mục</th>
+                            <th>Trang chủ</th>
+                            <th>Ngày tạo</th>
+                            <th>Tình trạng</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($data['data']->items as $item): ?>
+                            <tr bgcolor="#a9e5ff">
+                                <td><?php echo $item->title ?></td>
+                                <td><?php echo $item->categoryname ?></td>
+                                <td style="text-align: center" class="posthome" data-id="<?php echo $item->id ?>">
+                                    <?php if ($item->is_home == '1') : ?>
+                                        <a class="delete-btn add-button-disable" href="#" disabled="disabled"><i
+                                                class="fa fa-check-circle"
+                                                id="idhome-<?php echo $item->id ?>"></i></a>
+                                    <?php else: ?>
+                                        <a class="delete-btn add-button-disable" href="#" disabled="disabled"><i
+                                                class="fa fa-times" id="idhome-<?php echo $item->id ?>"></i></a>
+                                    <?php endif; ?>
+                                </td>
+                                <td><?php
+                                    $_datetime = $item->datecreate;
+                                    if ($_datetime != '')
+                                        echo DateTime::createFromFormat('YmdHis', $_datetime)->format('d/m/Y');
+                                    ?>
+                                </td>
+                                <td style="text-align: center" class="postactive" data-id="<?php echo $item->id ?>">
+                                    <?php if ($item->is_status == '1') : ?>
+                                        <a class="delete-btn add-button-disable" href="#" disabled="disabled"><i
+                                                class="fa fa-check-circle"
+                                                id="idstatus-<?php echo $item->id ?>"></i></a>
+                                    <?php else: ?>
+                                        <a class="delete-btn add-button-disable" href="#" disabled="disabled"><i
+                                                class="fa fa-times" id="idstatus-<?php echo $item->id ?>"></i></a>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th>Tiêu đề</th>
+                            <th>Danh mục</th>
+                            <th>Trang chủ</th>
+                            <th>Ngày tạo</th>
+                            <th>Tình trạng</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</section>
+<?php echo $this->tag->endForm(); ?>
+<script async>
+    $(function () {
+        $("#postsdata").DataTable();
+    });
+    var is_loading = false;// Why is working???
+    $(document).ready(function () {
+        $('.postactive').off('click').on('click', function (e) {
+            e.preventDefault();
+            var link = $(this);
+            var id = link.data('id');
+            if (is_loading == false) {
+                is_loading = true;
+                $.ajax({
+                    url: '/backend/posts/changestatus',
+                    type: 'POST',
+                    data: {id: id},
+                    dataType: 'text',
+                    success: function (result) {
+                        var show = '#idstatus-' + id;
+                        $(show).attr("class", result);
+                        is_loading = false;
+                    }
+                });
+            }
+        });
+    });
+    $(document).ready(function () {
+        $('.posthome').off('click').on('click', function (e) {
+            e.preventDefault();
+            var link = $(this);
+            var id = link.data('id');
+            if (is_loading == false) {
+                is_loading = true;
+                $.ajax({
+                    url: '/backend/posts/changehome',
+                    type: 'POST',
+                    data: {id: id},
+                    dataType: 'text',
+                    success: function (result) {
+                        var show = '#idhome-' + id;
+                        $(show).attr("class", result);
+                        is_loading = false;
+                    }
+                });
+            }
+        });
+    });
+</script>
