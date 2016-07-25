@@ -1,0 +1,100 @@
+<section class="content-header">
+    <h1>
+        Danh mục bài viết
+        <small>Version 1.0</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Danh mục bài viết</li>
+    </ol>
+</section>
+<?php
+echo $this->tag->form(
+    array(
+        "/backend/typespost/index",
+        "autocomplete" => "off",
+        "class" => "form-horizontal",
+        "name" => "typespostform",
+        "method" => "get"
+    )
+);
+?>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a href="/backend/typespost/new" class="btn btn-primary">
+                                <i class="fa fa-plus-square-o"></i> Tạo mới loại bài viết
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Danh mục bài viết</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="postsdata" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Tên</th>
+                            <th>Vị trí</th>
+                            <th>Trang chủ</th>
+                            <th>Tình trạng</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($data as $item): ?>
+                            <tr bgcolor="#a9e5ff">
+                                <td><a href="/backend/typespost/edit/<?php echo $item->name ?>"></a> </td>
+                                <td><?php echo $item->position ?></td>
+                                <td style="text-align: center" class="typesposthome" data-id="<?php echo $item->id ?>">
+                                    <?php if ($item->is_home == '1') : ?>
+                                        <a class="delete-btn add-button-disable" href="#" disabled="disabled"><i
+                                                class="fa fa-check-circle"
+                                                id="idhome-<?php echo $item->id ?>"></i></a>
+                                    <?php else: ?>
+                                        <a class="delete-btn add-button-disable" href="#" disabled="disabled"><i
+                                                class="fa fa-times" id="idhome-<?php echo $item->id ?>"></i></a>
+                                    <?php endif; ?>
+                                </td>
+                                <td style="text-align: center" class="typespoststatus" data-id="<?php echo $item->id ?>">
+                                    <?php if ($item->is_status == '1') : ?>
+                                        <a class="delete-btn add-button-disable" href="#" disabled="disabled"><i
+                                                class="fa fa-check-circle"
+                                                id="idstatus-<?php echo $item->id ?>"></i></a>
+                                    <?php else: ?>
+                                        <a class="delete-btn add-button-disable" href="#" disabled="disabled"><i
+                                                class="fa fa-times" id="idstatus-<?php echo $item->id ?>"></i></a>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th>Tên</th>
+                            <th>Vị trí</th>
+                            <th>Trang chủ</th>
+                            <th>Tình trạng</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</section>
+
+<?php echo $this->tag->endForm(); ?>

@@ -1,0 +1,87 @@
+<?php echo $this->getContent(); ?>
+<section class="content-header">
+    <h1>
+        Tạo mới danh mục bài viết
+        <small>Version 1.0</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Tạo mới danh mục bài viết</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="row">
+        <p><?php echo $this->flash->output() ?></p>
+        <div class="col-md-6">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Thông tin danh mục bài viết</h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form class="form-horizontal" action="/backend/typespost/create" id="createform" method="post">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="" class="col-sm-3 control-label">Tên</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Tên..." maxlength="32">
+                                <input type="hidden" id="idtypes" name="idtypes" value="<?php echo $data['id']?>">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-3 control-label">Thứ tự hiển thị</label>
+                            <div class="col-sm-2">
+                                <input type="text" class="form-control" id="position" name="position" maxlength="4">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-3 control-label">Keyword title</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="seo_title" name="seo_title" maxlength="48">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-3 control-label">Meta desc</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="seo_desc" name="seo_desc" maxlength="128">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <a href="/backend/typespost/index" class="btn btn-default">Hủy</a>
+                        <button type="submit" class="btn btn-primary pull-right">Lưu</button>
+                    </div>
+                    <!-- /.box-footer -->
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    $().ready(function () {
+        // validate signup form on keyup and submit
+        $("#createform").validate({
+            rules: {
+                name: {
+                    required: true,
+                    minlength: 4
+                },
+                position: {
+                    required: true,
+                    number: true
+                }
+            },
+            messages: {
+                name: {
+                    required: "Nhập tên",
+                    minlength: "Lớn hơn 4 ký tự"
+                },
+                position: {
+                    required: "Nhập thứ tự hiển thị",
+                    number: "Nhập số"
+                }
+            }
+        });
+    });
+</script>

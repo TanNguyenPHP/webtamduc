@@ -1,0 +1,156 @@
+<?php echo $this->getContent(); ?>
+<section class="content-header">
+    <h1>
+        Tạo mới bài viết
+        <small>Version 1.0</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Tạo mới bài viết</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="row">
+        <p><?php echo $this->flash->output() ?></p>
+        <div class="col-md-9">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Thông tin bài viết</h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form class="form-horizontal" action="/backend/posts/create" id="createform" method="post" enctype="multipart/form-data">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="" class="col-sm-3 control-label">Tên bài viết</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="title" name="title" placeholder="Tên bài viết..." maxlength="96">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-3 control-label">Tóm tắt bài viết</label>
+                            <div class="col-sm-9">
+                                <textarea class="form-control" rows="3" id="content_short" name="content_short" placeholder="Tóm tắt bài viết..." maxlength="128"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-3 control-label">Nhóm bài viết</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" name="id_typespost">
+                                    <option value="0">Chọn nhóm bài viết</option>
+                                    <?php foreach($data['typespost'] as $item ): ?>
+                                        <option value="<?php echo $item->id ?>"><?php echo $item->name ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-3 control-label">Bài viết</label>
+                            <div class="col-sm-9">
+                                <textarea class="form-control" rows="10" id="content" name="content" ></textarea>
+                                <span id="messageContent" class="field-validation-valid" data-valmsg-for="Name"
+                                      data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-3 control-label">Ảnh đại diện</label>
+                            <div class="col-sm-9">
+                                <input type="file" id="avatar_image">
+                                <p id="pic_error2" style="display:none; color:#FF0000;">Kích thước ảnh không quá 2 MB.</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-3 control-label">Thứ tự hiển thị</label>
+                            <div class="col-sm-1">
+                                <input type="text" class="form-control" id="position" name="position" maxlength="4">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-3 control-label">Keyword title</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="seo_title" name="seo_title" maxlength="48">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-3 control-label">Meta desc</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="seo_desc" name="seo_desc" maxlength="128">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <a href="/backend/posts/index" class="btn btn-default">Hủy</a>
+                        <button type="submit" class="btn btn-primary pull-right">Lưu</button>
+                    </div>
+                    <!-- /.box-footer -->
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    tinymce.init({
+        selector: '#content',
+        plugins: "image imagetools",
+        toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'
+    });
+    $('input[type="submit"]').prop("disabled", true);
+    var a = 0;
+    var b = 0;
+    $('#avatar_image').bind('change', function () {
+        if ($('input:submit').attr('disabled', false)) {
+            $('input:submit').attr('disabled', true);
+        }
+        var ext = $('#avatar_image').val().split('.').pop().toLowerCase();
+        if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
+            $('#pic_error2').slideUp("slow");
+            a = 0;
+        } else {
+            var picsize = (this.files[0].size);
+            if (picsize > 2048000) {
+                $('#pic_error2').slideDown("slow");
+                a = 0;
+            } else {
+                a = 1;
+                $('#pic_error2').slideUp("slow");
+            }
+            if (a == 1 || b == 2) {
+                $('input:submit').attr('disabled', false);
+            }
+        }
+    });
+    $("form").submit(function () {
+        var editorContent = tinyMCE.get('content').getContent();
+        if (editorContent == '') {
+            $('#messageContent').html('Nhập nội dung');
+            return false;
+        }
+        return true;
+    });
+    $().ready(function () {
+        // validate signup form on keyup and submit
+        $("#createform").validate({
+            rules: {
+                title: {
+                    required: true,
+                    minlength: 4
+                },
+                position: {
+                    required: true,
+                    number: true
+                }
+            },
+            messages: {
+                title: {
+                    required: "Nhập tên",
+                    minlength: "Lớn hơn 4 ký tự"
+                },
+                position: {
+                    required: "Nhập thứ tự hiển thị",
+                    number: "Nhập số"
+                }
+            }
+        });
+    });
+</script>

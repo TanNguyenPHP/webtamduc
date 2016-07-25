@@ -25,6 +25,14 @@ class PostsController extends ControllerBase
             'limit' => $limit,
             'filter' => $title);
     }
+    public function newAction()
+    {
+
+    }
+    public function createAction()
+    {
+
+    }
     public function changestatusAction()
     {
         $id = $this->request->getPost("id");

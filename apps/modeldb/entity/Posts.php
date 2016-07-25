@@ -88,7 +88,7 @@ class Posts extends Model
      *
      * @var integer
      */
-    public $id_category;
+    public $id_typespost;
 
     /**
      *
@@ -171,7 +171,7 @@ class Posts extends Model
         return $params = array(
             'models' => array('p' => 'Coredev\Modeldb\Entity\Posts'),
             'columns' => array('p.id', 'p.title', 'p.is_home', 'p.is_status', 'p.datecreate', 'c.name categoryname'),
-            'joins' => array('0' => array('Coredev\Modeldb\Entity\Category', 'c.id = p.id_category', 'c', 'left')),
+            'joins' => array('0' => array('Coredev\Modeldb\Entity\Typespost', 'c.id = p.id_typespost', 'c', 'left')),
             'conditions' => $conditions,
             // or 'conditions' => "created > '2013-01-01' AND created < '2014-01-01'",
             'order' => 'p.datecreate desc,p.title '
