@@ -57,7 +57,7 @@ echo $this->tag->form(
                                         Hiển thị
                                     </label>
                                   </span>
-                                <select class="form-control">
+                                <select class="form-control" name="limit">
                                     <?php for ($i = 50; $i <= 100; $i = $i + 50) {
                                         if ($i == $data['limit'])
                                             echo "<option value=\"$i\" selected>$i</option>";
@@ -142,11 +142,16 @@ echo $this->tag->form(
 </section>
 <?php echo $this->tag->endForm(); ?>
 <script async>
-    $(function () {
-        $("#postsdata").DataTable();
-    });
+   // $(function () {
+     //   $("#postsdata").DataTable();
+    //});
     var is_loading = false;// Why is working???
     $(document).ready(function () {
+        $('#postsdata').dataTable( {
+            "language": {
+                "url": "dataTables.Vietnamese.lang"
+            }
+        } );
         $('.postactive').off('click').on('click', function (e) {
             e.preventDefault();
             var link = $(this);

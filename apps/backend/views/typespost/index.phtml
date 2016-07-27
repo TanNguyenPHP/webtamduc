@@ -1,3 +1,4 @@
+<?php echo $this->getContent(); ?>
 <section class="content-header">
     <h1>
         Danh mục bài viết
@@ -21,6 +22,7 @@ echo $this->tag->form(
 ?>
 
 <section class="content">
+    <p><?php echo $this->flash->output() ?></p>
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
@@ -56,7 +58,7 @@ echo $this->tag->form(
                         <tbody>
                         <?php foreach ($data as $item): ?>
                             <tr bgcolor="#a9e5ff">
-                                <td><a href="/backend/typespost/edit/<?php echo $item->name ?>"></a> </td>
+                                <td><a href="/backend/typespost/edit/<?php echo $item->id ?>"><?php echo $item->name ?></a> </td>
                                 <td><?php echo $item->position ?></td>
                                 <td style="text-align: center" class="typesposthome" data-id="<?php echo $item->id ?>">
                                     <?php if ($item->is_home == '1') : ?>
@@ -98,3 +100,46 @@ echo $this->tag->form(
 </section>
 
 <?php echo $this->tag->endForm(); ?>
+<script>
+    var is_loading = false;// Why is working???
+    $(document).ready(function () {
+        $('.typesposthome').off('click').on('click', function (e) {
+            e.preventDefault();
+            var link = $(this);
+            var id = link.data('id');
+            if (is_loading == false) {
+                is_loading = true;
+                $.ajax({
+                    url: '/backend/typespost/changehome',
+                    type: 'POST',
+                    data: {id: id},
+                    dataType: 'text',
+                    success: function (result) {
+                        var show = '#idhome-' + id;
+                        $(show).attr("class", result);
+                        is_loading = false;
+                    }
+                });
+            }
+        });
+        $('.typespoststatus').off('click').on('click', function (e) {
+            e.preventDefault();
+            var link = $(this);
+            var id = link.data('id');
+            if (is_loading == false) {
+                is_loading = true;
+                $.ajax({
+                    url: '/backend/typespost/changestatus',
+                    type: 'POST',
+                    data: {id: id},
+                    dataType: 'text',
+                    success: function (result) {
+                        var show = '#idstatus-' + id;
+                        $(show).attr("class", result);
+                        is_loading = false;
+                    }
+                });
+            }
+        });
+    });
+</script>

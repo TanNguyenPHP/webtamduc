@@ -13,14 +13,24 @@ use Phalcon\CryptInterface;
 use Phalcon\Crypt\Exception;
 use Phalcon\Crypt;
 
+
 class SecuritySystem
 {
-    public static function HashPassword($pass, $username)
+    public static function HashPassword($pass)
     {
         $security = new Security();
         $security->setDefaultHash(8);//Sha512
-        $key = self::GenKey($username);
-        return $security->hash($pass . $key) . $key;
+        return $security->hash($pass);
+    }
+
+    public static function CheckHashPassword($pass, $passcompare)
+    {
+        $security = new Security();
+        $security->setDefaultHash(8);//Sha512
+        if ($security->checkHash($pass, $passcompare))
+            return true;
+        else
+            return false;
     }
 
     private static function GenPassword($username, $password)

@@ -11,6 +11,7 @@ use Coredev\Modeldb\Entity\Users;
 use Coredev\Modeldb\Entity\RoleGroup;
 use Phalcon\Mvc\Controller;
 use Coredev\Commons\SecuritySystem;
+use Phalcon\Di;
 
 class UsersController extends ControllerBase
 {
@@ -83,7 +84,7 @@ class UsersController extends ControllerBase
         }
         $user = new Users;
         $user->username = $this->request->getPost("username");
-        $user->password = SecuritySystem::HashPassword($this->request->getPost("password"), $user->username);
+        $user->password = SecuritySystem::HashPassword($this->request->getPost("password"));
         $user->name = $this->request->getPost("name");
         $user->datecreate = date('YmdHis');
         $user->is_active = isset($_POST["is_active"]) ? '1' : '0';
@@ -104,5 +105,35 @@ class UsersController extends ControllerBase
         }
 
         return $this->response->redirect('/backend/users/index');
+    }
+    public function changepasswordAction()
+    {
+
+    }
+    public function savepassAction()
+    {
+        $id = Di::getDefault()->getSession()->get('sessionUser');
+        $user = Users::findFirstByid($id);
+        $passold = $_POST['oldpass'];
+        if (SecuritySystem::CheckHashPassword($passold,$user->password)) {
+            $user->password = SecuritySystem::HashPassword($_POST['newpass']);
+            $user->save();
+            $this->flash->success("Mật khẩu được thay đổi");
+            $this->dispatcher->forward(array(
+                'controller' => "users",
+                'action' => 'changepassword'
+            ));
+        } else {
+            $this->flash->error("Mật khẩu cũ sai");
+            $this->dispatcher->forward(array(
+                'controller' => "users",
+                'action' => 'changepassword'
+            ));
+        }
+    }
+    public function logoffAction()
+    {
+        $this->session->destroy();
+        return $this->response->redirect('/quanly');
     }
 }

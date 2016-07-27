@@ -3,7 +3,7 @@ namespace Coredev\Modeldb\Entity;
 
 use Phalcon\Mvc\Model;
 
-class Users extends Model
+class Pictures extends Model
 {
 
     /**
@@ -16,25 +16,13 @@ class Users extends Model
      *
      * @var string
      */
-    public $username;
+    public $name;
 
     /**
      *
      * @var string
      */
-    public $password;
-
-    /**
-     *
-     * @var string
-     */
-    public $datecreate;
-
-    /**
-     *
-     * @var string
-     */
-    public $is_active;
+    public $dir;
 
     /**
      *
@@ -46,44 +34,31 @@ class Users extends Model
      *
      * @var string
      */
-    public $room;
+    public $datecreate;
+
+    /**
+     *
+     * @var integer
+     */
+    public $id_album;
 
     /**
      *
      * @var string
      */
-    public $desc;
+    public $position;
 
     /**
      *
      * @var string
      */
-    public $group;
+    public $is_show;
 
     /**
      *
      * @var string
      */
-    public $email;
-
-    /**
-     *
-     * @var string
-     */
-    public $address;
-
-    /**
-     *
-     * @var string
-     */
-    public $name;
-
-    /**
-     *
-     * @var string
-     */
-    public $dob;
-    public $id_group;
+    public $alt;
 
     /**
      * Returns table name mapped in the model.
@@ -92,14 +67,14 @@ class Users extends Model
      */
     public function getSource()
     {
-        return 'users';
+        return 'pictures';
     }
 
     /**
      * Allows to query a set of records that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Users[]
+     * @return Pictures[]
      */
     public static function find($parameters = null)
     {
@@ -110,18 +85,15 @@ class Users extends Model
      * Allows to query the first record that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Users
+     * @return Pictures
      */
-    public static function
-
-    findFirst($parameters = null)
+    public static function findFirst($parameters = null)
     {
         return parent::findFirst($parameters);
     }
-
-    public static function findUsersPaging($name, $page, $limit)
+    public static function findPicsPaging($id_album="", $page="", $limit="")
     {
-        $queryBuilder = new \Phalcon\Mvc\Model\Query\Builder(self::buildparams($name, $page, $limit));
+        $queryBuilder = new \Phalcon\Mvc\Model\Query\Builder(self::buildparams($id_album));
 
         $paginator = new \Phalcon\Paginator\Adapter\QueryBuilder(array(
             "builder" => $queryBuilder,
@@ -131,20 +103,19 @@ class Users extends Model
         //return $queryBuilder->getQuery()->execute();
         return $paginator->getPaginate();
     }
-
-    private static function buildparams($name, $page, $limit)
+    private static function buildparams($id_album = "")
     {
-        $conditions = '1=1';
-        if ($name != '')
-            $conditions = $conditions . " and u.username like '%$name%' or u.name like '%$name%'";
+        $conditions = "p.is_del ='0'";
+        if ($id_album != "")
+            $conditions = $conditions . " and a.id_album = '$id_album' ";
+
         return $params = array(
-            'models' => array('u' => 'Coredev\Modeldb\Entity\Users'),
-            'columns' => array('u.id', 'u.username', 'u.name', 'u.is_active', 'u.datecreate', 'g.name gname'),
-            'joins' => array('0' => array('Coredev\Modeldb\Entity\RoleGroup', 'g.id = u.id_group', 'g', 'left')),
+            'models' => array('p' => 'Coredev\Modeldb\Entity\Pictures'),
+            'columns' => array('p.name', 'p.id', 'p.dir', 'p.id_album','p.position','a.name aname','p.is_show'),
+            'joins' => array('0' => array('Coredev\Modeldb\Entity\Albums', 'a.id = p.id_album', 'a','left')),
             'conditions' => $conditions,
-            // or 'conditions' => "created > '2013-01-01' AND created < '2014-01-01'",
-            'order' => 'u.name'
-            // or 'limit' => array(20, 20),
+            'order' => 'a.datecreate desc'
         );
+
     }
 }

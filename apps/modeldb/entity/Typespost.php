@@ -79,9 +79,13 @@ class Typespost extends Model
     {
         return parent::find($parameters);
     }
-    public static function findAll()
+    public static function findAll($is_status = '')
     {
-        return parent::find("is_del = '0'");
+        $condition = "is_del = '0'";
+        if($is_status != "")
+            $condition = $condition . " and is_status = '$is_status'";
+
+        return parent::find($condition);
     }
     /**
      * Allows to query the first record that match the specified conditions

@@ -8,6 +8,7 @@
 namespace Coredev\Backend\Controllers;
 
 use Coredev\Modeldb\Entity\Posts;
+use Coredev\Modeldb\Entity\Typespost;
 
 class PostsController extends ControllerBase
 {
@@ -27,11 +28,46 @@ class PostsController extends ControllerBase
     }
     public function newAction()
     {
+        return $this->view->data = Typespost::findAll('1');
 
     }
     public function createAction()
     {
+        $post = new Posts();
+        $post->title = $this->request->getPost('title');
+        $post->content_short = $this->request->getPost('content_short');
+        $post->content = $this->request->getPost('content');
+        $post->position = $this->request->getPost('position');
+        $post->id_typespost = $this->request->getPost('id_typespost');
+        $post->seo_title = $this->request->getPost('seo_title');
+        $post->seo_desc = $this->request->getPost('seo_desc');
+        $post->datecreate = date('YmdHis');
+        $post->id_user = Di::getDefault()->getSession()->get('sessionUser');
+        $post->is_del = '0';
+        $post->is_status = '1';
+        $post->slug = UtilsSEO::CreateSlug($post->title) . '-' . date('dmYHi');
 
+        try {
+            $this::saveImg($_FILES['avatar_image']);
+            $post->avatar_image = Params::pathfolderavatarimage . $_FILES['avatar_image']['name'];
+            if (!$post->save()) {
+                foreach ($post->getMessages() as $message) {
+                    $this->flash->error($message);
+                }
+                $this->dispatcher->forward(array(
+                    'controller' => "news",
+                    'action' => 'new'
+                ));
+            }
+        } catch (Exception $e) {
+            $this->flash->error(var_dump($e));
+            $this->dispatcher->forward(array(
+                'controller' => "news",
+                'action' => 'new'
+            ));
+        }
+
+        return $this->response->redirect('/backend/news/index');
     }
     public function changestatusAction()
     {

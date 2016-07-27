@@ -1,34 +1,36 @@
+<?php echo $this->getContent(); ?>
 <section class="content-header">
     <h1>
-        Danh sách tài khoản
+        Danh sách album
         <small>Version 1.0</small>
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Danh sách tài khoản</li>
+        <li class="active">Danh sách album</li>
     </ol>
 </section>
 <?php
 echo $this->tag->form(
     array(
-        "/backend/users/index",
+        "/backend/albums/index",
         "autocomplete" => "off",
         "class" => "form-horizontal",
-        "name" => "usersform",
+        "name" => "albumsform",
         "method" => "get"
     )
 );
 ?>
 <!-- Main content -->
 <section class="content">
+    <p><?php echo $this->flash->output() ?></p>
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-body">
                     <div class="row">
                         <div class="col-lg-12">
-                            <a href="/backend/users/new" class="btn btn-primary">
-                                <i class="fa fa-plus-square-o"></i> Tạo mới User
+                            <a href="/backend/albums/new" class="btn btn-primary">
+                                <i class="fa fa-plus-square-o"></i> Tạo mới album
                             </a>
                         </div>
                     </div>
@@ -48,7 +50,7 @@ echo $this->tag->form(
                                     </button>
                                   </span>
                                 <input type="text" name="filter" id="filter" placeholder="Nhập tên..."
-                                       class="form-control">
+                                       class="form-control" value="<?php echo $data['filter'] ?>">
                             </div>
                         </div>
                         <div class="col-lg-2">
@@ -76,51 +78,35 @@ echo $this->tag->form(
         <div class="col-md-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Danh sách tài khoản</h3>
+                    <h3 class="box-title">Danh sách album</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <table id="userdata" class="table table-bordered table-striped">
+                    <table id="postsdata" class="table table-bordered table-striped">
                         <thead>
                         <tr>
-                            <th>Tài khoản</th>
                             <th>Tên</th>
-                            <th>Tình trạng</th>
-                            <th>Nhóm</th>
                             <th>Ngày tạo</th>
+                            <th>Xóa</th>
                         </tr>
                         </thead>
                         <tbody>
                         <?php foreach ($data['data']->items as $item): ?>
-                            <tr>
-                                <td><?php echo $item->username ?></td>
+                            <tr bgcolor="#a9e5ff">
                                 <td><?php echo $item->name ?></td>
-                                <td style="text-align: center" class="useractive" data-id="<?php echo $item->id ?>">
-                                    <?php if ($item->is_active == '1') : ?>
-                                        <a class="delete-btn add-button-disable" href="#" disabled="disabled"><i
-                                                class="fa fa-check-circle"
-                                                id="idactive-<?php echo $item->id ?>"></i></a>
-                                    <?php else: ?>
-                                        <a class="delete-btn add-button-disable" href="#" disabled="disabled"><i
-                                                class="fa fa-times" id="idactive-<?php echo $item->id ?>"></i></a>
-                                    <?php endif; ?>
+                                <td><?php echo DateTime::createFromFormat('YmdHis', $item->datecreate)->format('d/m/Y'); ?></td>
+                                <td style="text-align: center" class="albumdel" data-id="<?php echo $item->id ?>">
+                                    <a class="delete-btn add-button-disable" href="#" disabled="disabled"><i
+                                            class="fa fa-times" id="idalbumdel-<?php echo $item->id ?>"></i></a>
                                 </td>
-                                <td><?php echo $item->gname ?></td>
-                                <td><?php
-                                    $_datetime = $item->datecreate;
-                                    if ($_datetime != '')
-                                        echo DateTime::createFromFormat('YmdHis', $_datetime)->format('d/m/Y');
-                                    ?></td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>
                         <tfoot>
                         <tr>
-                            <th>Tài khoản</th>
                             <th>Tên</th>
-                            <th>Tình trạng</th>
-                            <th>Nhóm</th>
                             <th>Ngày tạo</th>
+                            <th>Xóa</th>
                         </tr>
                         </tfoot>
                     </table>
@@ -132,24 +118,29 @@ echo $this->tag->form(
 </section>
 <?php echo $this->tag->endForm(); ?>
 <script async>
-    $(function () {
-        $("#userdata").DataTable();
-    });
+    // $(function () {
+    //   $("#postsdata").DataTable();
+    //});
     var is_loading = false;// Why is working???
     $(document).ready(function () {
-        $('.useractive').off('click').on('click', function (e) {
+        $('#postsdata').dataTable({
+            "language": {
+                "url": "dataTables.Vietnamese.lang"
+            }
+        });
+        $('.albumdel').off('click').on('click', function (e) {
             e.preventDefault();
             var link = $(this);
             var id = link.data('id');
             if (is_loading == false) {
                 is_loading = true;
                 $.ajax({
-                    url: '/backend/users/changeactive',
+                    url: '/backend/albums/del',
                     type: 'POST',
                     data: {id: id},
                     dataType: 'text',
                     success: function (result) {
-                        var show = '#idactive-' + id;
+                        var show = '#idalbumdel-' + id;
                         $(show).attr("class", result);
                         is_loading = false;
                     }
