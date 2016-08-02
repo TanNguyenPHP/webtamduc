@@ -1,12 +1,12 @@
 <?php echo $this->getContent(); ?>
 <section class="content-header">
     <h1>
-        Sửa bài viết
+        Tạo mới bài viết
         <small>Version 1.0</small>
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Sửa bài viết</li>
+        <li class="active">Tạo mới bài viết</li>
     </ol>
 </section>
 <section class="content">
@@ -19,18 +19,18 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form class="form-horizontal" action="/backend/posts/create" id="createform" method="post" enctype="multipart/form-data">
+                <form class="form-horizontal" action="/backend/posts/save" id="createform" method="post" enctype="multipart/form-data">
                     <div class="box-body">
                         <div class="form-group">
                             <label for="" class="col-sm-3 control-label">Tên bài viết</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="title" name="title" placeholder="Tên bài viết..." maxlength="96">
+                                <input type="text" class="form-control" id="title" name="title" value="<?php echo $data["post"]->title?>" maxlength="96">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="" class="col-sm-3 control-label">Tóm tắt bài viết</label>
                             <div class="col-sm-9">
-                                <textarea class="form-control" rows="3" id="content_short" name="content_short" placeholder="Tóm tắt bài viết..." maxlength="128"></textarea>
+                                <textarea class="form-control" rows="3" id="content_short" name="content_short" maxlength="128"><?php echo $data["post"]->content_short?></textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -38,7 +38,7 @@
                             <div class="col-sm-9">
                                 <select class="form-control" name="id_typespost">
                                     <option value="0">Chọn nhóm bài viết</option>
-                                    <?php foreach($data as $item ): ?>
+                                    <?php foreach($data["typeposts"] as $item ): ?>
                                         <option value="<?php echo $item->id ?>"><?php echo $item->name ?></option>
                                     <?php endforeach; ?>
                                 </select>
@@ -47,7 +47,7 @@
                         <div class="form-group">
                             <label for="" class="col-sm-3 control-label">Bài viết</label>
                             <div class="col-sm-9">
-                                <textarea class="form-control" rows="10" id="content" name="content" ></textarea>
+                                <textarea class="form-control" rows="10" id="content" name="content" ><?php echo $data["post"]->content?></textarea>
                                 <span id="messageContent" class="field-validation-valid" data-valmsg-for="Name"
                                       data-valmsg-replace="true"></span>
                             </div>
@@ -62,19 +62,19 @@
                         <div class="form-group">
                             <label for="" class="col-sm-3 control-label">Thứ tự hiển thị</label>
                             <div class="col-sm-1">
-                                <input type="text" class="form-control" id="position" name="position" maxlength="4">
+                                <input type="text" class="form-control" id="position" name="position" value="<?php echo $data["post"]->position?>"  maxlength="4">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="" class="col-sm-3 control-label">Keyword title</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="seo_title" name="seo_title" maxlength="48">
+                                <input type="text" class="form-control" id="seo_title" name="seo_title" value="<?php echo $data["post"]->seo_title?>"  maxlength="48">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="" class="col-sm-3 control-label">Meta desc</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="seo_desc" name="seo_desc" maxlength="128">
+                                <input type="text" class="form-control" id="seo_desc" name="seo_desc" value="<?php echo $data["post"]->seo_desc?>"  maxlength="128">
                             </div>
                         </div>
                     </div>
@@ -95,7 +95,7 @@
         plugins: "image imagetools",
         toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'
     });
-    $('input[type="submit"]').prop("disabled", true);
+
     var a = 0;
     var b = 0;
     $('#avatar_image').bind('change', function () {

@@ -11,6 +11,7 @@ use Coredev\Modeldb\Entity\Pictures as Picture;
 use Coredev\Modeldb\Entity\Albums;
 use Coredev\Commons\UploadHandler;
 use Coredev\Commons\ParamsConstant as params;
+
 class PicturesController extends ControllerBase
 {
     public function indexAction()
@@ -21,7 +22,7 @@ class PicturesController extends ControllerBase
             $limit = $_GET["limit"];
         if (isset($_GET["idalbum"]))
             $idalbum = $_GET["idalbum"];
-        return $this->view->data = array("data" => Pictures::findPicsPaging($idalbum, "1", $limit),
+        return $this->view->data = array("data" => Picture::findPicsPaging($idalbum, "1", $limit),
             "limit" => $limit,
             "idalbum" => $idalbum);
     }
@@ -85,5 +86,25 @@ class PicturesController extends ControllerBase
         } catch (Exception $e) {
             return $this->response->redirect('/backend/pictures/new');
         }
+    }
+    public function delAction()
+    {
+        $id = $this->request->getPost("id");
+        $pic = Picture::findFirstByid($id);
+        $pic->is_del = "1";
+        try {
+
+            if (!$pic->save()) {
+                foreach ($pic->getMessages() as $message) {
+                    $this->flash->error($message);
+                }
+                return $this::sendText('Lỗi');
+            }
+        } catch (Exception $e) {
+            return $this::sendText('Lỗi');
+        }
+        $data = "fa fa-check-circle";
+
+        return $this::sendText($data);
     }
 }

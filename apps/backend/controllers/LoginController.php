@@ -11,6 +11,7 @@ use Phalcon\Mvc\View;
 use Coredev\Commons\SecuritySystem;
 use Coredev\Commons\Authentication;
 use Coredev\Modeldb\Entity\Users;
+use Phalcon\Di;
 
 class LoginController extends ControllerBase
 {

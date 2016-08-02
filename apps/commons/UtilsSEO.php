@@ -7,6 +7,7 @@
  */
 
 namespace Coredev\commons;
+use Coredev\Commons\RemoveUnicode;
 
 class UtilsSEO
 {

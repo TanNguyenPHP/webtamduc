@@ -62,7 +62,7 @@ echo $this->tag->form(
                                   </span>
                                 <select class="form-control" name="idalbum">
                                     <option value="">Tất cả</option>
-                                    <?php foreach($data['albums'] as $item) {
+                                    <?php foreach ($data['albums'] as $item) {
                                         if ($item->id == $data['idalbum'])
                                             echo "<option value=\"$item->id\" selected>$item->name</option>";
                                         else
@@ -106,7 +106,7 @@ echo $this->tag->form(
                             <th>Hình</th>
                             <th>Album</th>
                             <th>Đường dẫn</th>
-                            <th>Tình trạng</th>
+                            <th>Xóa</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -117,21 +117,18 @@ echo $this->tag->form(
                                          alt="Cinque Terre" width="200" height="200">
                                 </td>
                                 <td><?php echo $item->aname ?></td>
-                                <td style="text-align: center">
-                                    <input type="text" class="form-control" readonly>
+                                <td style="text-align: center" width="1000px">
+                                    <div class="input-group margin">
+                                        <input type="text" class="form-control" readonly
+                                               value="<?php echo "http://" . str_replace("\\", "/", $_SERVER['SERVER_NAME'] . "\\" . $item->dir); ?>" >
                                         <span class="input-group-btn">
-                                          <button type="button" class="btn btn-info btn-flat">Copy</button>
+                                          <button type="button" class="btn btn-info btn-flat">Go!</button>
                                         </span>
+                                    </div>
                                 </td>
-                                <td style="text-align: center" class="picshow" data-id="<?php echo $item->id ?>">
-                                    <?php if ($item->is_show == '1') : ?>
-                                        <a class="delete-btn add-button-disable" href="#" disabled="disabled"><i
-                                                class="fa fa-check-circle"
-                                                id="idstatus-<?php echo $item->id ?>"></i></a>
-                                    <?php else: ?>
-                                        <a class="delete-btn add-button-disable" href="#" disabled="disabled"><i
-                                                class="fa fa-times" id="idstatus-<?php echo $item->id ?>"></i></a>
-                                    <?php endif; ?>
+                                <td style="text-align: center" class="picdel" data-id="<?php echo $item->id ?>">
+                                    <a class="delete-btn add-button-disable" href="#" disabled="disabled"><i
+                                            class="fa fa-times" id="iddel-<?php echo $item->id ?>"></i></a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -141,7 +138,7 @@ echo $this->tag->form(
                             <th>Hình</th>
                             <th>Album</th>
                             <th>Đường dẫn</th>
-                            <th>Tình trạng</th>
+                            <th>Xóa</th>
                         </tr>
                         </tfoot>
                     </table>
@@ -156,19 +153,19 @@ echo $this->tag->form(
 <script>
     var is_loading = false;// Why is working???
     $(document).ready(function () {
-        $('.picshow').off('click').on('click', function (e) {
+        $('.picdel').off('click').on('click', function (e) {
             e.preventDefault();
             var link = $(this);
             var id = link.data('id');
             if (is_loading == false) {
                 is_loading = true;
                 $.ajax({
-                    url: '/backend/pictures/changeshow',
+                    url: '/backend/pictures/del',
                     type: 'POST',
                     data: {id: id},
                     dataType: 'text',
                     success: function (result) {
-                        var show = '#idhome-' + id;
+                        var show = '#iddel-' + id;
                         $(show).attr("class", result);
                         is_loading = false;
                     }

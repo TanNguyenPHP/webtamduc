@@ -19,6 +19,7 @@ echo $this->tag->form(
     )
 );
 ?>
+<p><?php echo $this->flashSession->output() ?></p>
 <!-- Main content -->
 <section class="content">
     <div class="row">
@@ -27,7 +28,7 @@ echo $this->tag->form(
                 <div class="box-body">
                     <div class="row">
                         <div class="col-lg-12">
-                            <a href="/backend/posts/new" class="btn btn-primary">
+                            <a href="/backend/posts/new/" class="btn btn-primary">
                                 <i class="fa fa-plus-square-o"></i> Tạo mới bài viết
                             </a>
                         </div>
@@ -93,7 +94,7 @@ echo $this->tag->form(
                         <tbody>
                         <?php foreach ($data['data']->items as $item): ?>
                             <tr bgcolor="#a9e5ff">
-                                <td><?php echo $item->title ?></td>
+                                <td><a href="/backend/posts/edit/<?php echo $item->id ?>"><?php echo $item->title ?></td>
                                 <td><?php echo $item->categoryname ?></td>
                                 <td style="text-align: center" class="posthome" data-id="<?php echo $item->id ?>">
                                     <?php if ($item->is_home == '1') : ?>
