@@ -1,0 +1,111 @@
+<section class="content-header">
+    <h1>
+        Danh sách liên hệ
+        <small>Version 1.0</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Danh sách liên hệ</li>
+    </ol>
+</section>
+<?php
+echo $this->tag->form(
+    array(
+        "/backend/contact/index",
+        "autocomplete" => "off",
+        "class" => "form-horizontal",
+        "name" => "contactform",
+        "method" => "get"
+    )
+);
+?>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Danh sách liên hệ</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="tbcontact" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Họ và tên</th>
+                            <th>Email</th>
+                            <th>Nội dung</th>
+                            <th>Ngày tạo</th>
+                            <th>Xem</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($data as $item): ?>
+                            <tr>
+                                <td><?php echo $item->name ?></td>
+                                <td><?php echo $item->email ?></td>
+                                <td><?php echo $item->content ?></td>
+                                <td><?php
+                                    $_datetime = $item->date;
+                                    if ($_datetime != '')
+                                        echo DateTime::createFromFormat('YmdHis', $_datetime)->format('d/m/Y');
+                                    ?></td>
+                                <td style="text-align: center" class="contactstatus" data-id="<?php echo $item->id ?>">
+                                    <?php if ($item->is_status == '1') : ?>
+                                        <a class="delete-btn add-button-disable" href="#" disabled="disabled"><i
+                                                class="fa fa-check-circle"
+                                                id="idstatus-<?php echo $item->id ?>"></i></a>
+                                    <?php else: ?>
+                                        <a class="delete-btn add-button-disable" href="#" disabled="disabled"><i
+                                                class="fa fa-times" id="idstatus-<?php echo $item->id ?>"></i></a>
+                                    <?php endif; ?>
+                                </td>
+
+
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th>Họ và tên</th>
+                            <th>Email</th>
+                            <th>Nội dung</th>
+                            <th>Ngày tạo</th>
+                            <th>Xem</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</section>
+<?php echo $this->tag->endForm(); ?>
+<script async>
+    $(function () {
+        $("#tbcontact").DataTable();
+    });
+    var is_loading = false;// Why is working???
+    $(document).ready(function () {
+        $('.contactstatus').off('click').on('click', function (e) {
+            e.preventDefault();
+            var link = $(this);
+            var id = link.data('id');
+            if (is_loading == false) {
+                is_loading = true;
+                $.ajax({
+                    url: '/backend/contact/changestatus',
+                    type: 'POST',
+                    data: {id: id},
+                    dataType: 'text',
+                    success: function (result) {
+                        var show = '#idstatus-' + id;
+                        $(show).attr("class", result);
+                        is_loading = false;
+                    }
+                });
+            }
+        });
+    });
+</script>

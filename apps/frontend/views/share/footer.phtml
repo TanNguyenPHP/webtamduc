@@ -1,0 +1,70 @@
+<div class="inner">
+    <section>
+        <h2>LIÊN HỆ</h2>
+        <form method="post" action="/contact/create" id="contactform">
+            <div class="field half first">
+                <input type="text" name="namecontact" id="namecontact" placeholder="TÊN" maxlength="48"/>
+            </div>
+            <div class="field half">
+                <input type="email" name="emailcontact" id="emailcontact" placeholder="Email" maxlength="32"/>
+            </div>
+            <div class="field">
+                <textarea name="messagecontact" id="messagecontact" placeholder="THÔNG ĐIỆP" maxlength="96"></textarea>
+            </div>
+            <ul class="actions">
+                <li><input type="submit" value="GỬI" class="special" /></li>
+            </ul>
+        </form>
+    </section>
+    <section>
+        <h2>Follow</h2>
+        <ul class="icons">
+            <li><a href="#" class="icon style2 fa-twitter"><span class="label">Twitter</span></a></li>
+            <li><a href="#" class="icon style2 fa-facebook"><span class="label">Facebook</span></a></li>
+            <li><a href="#" class="icon style2 fa-instagram"><span class="label">Instagram</span></a></li>
+            <li><a href="#" class="icon style2 fa-dribbble"><span class="label">Dribbble</span></a></li>
+            <li><a href="#" class="icon style2 fa-github"><span class="label">GitHub</span></a></li>
+            <li><a href="#" class="icon style2 fa-500px"><span class="label">500px</span></a></li>
+            <li><a href="#" class="icon style2 fa-phone"><span class="label">Phone</span></a></li>
+            <li><a href="#" class="icon style2 fa-envelope-o"><span class="label">Email</span></a></li>
+        </ul>
+    </section>
+    <ul class="copyright">
+        <li>&copy; TamDuc. All rights reserved</li><li>Design: <a href="#">NBTAN</a></li>
+    </ul>
+</div>
+<script>
+    $().ready(function () {
+        // validate signup form on keyup and submit
+        $("#contactform").validate({
+            rules: {
+                namecontact: {
+                    required: true,
+                    minlength: 4
+                },
+                emailcontact: {
+                    required: true,
+                    email: true
+                },
+                messagecontact: {
+                    required: true,
+                    minlength: 4
+                }
+            },
+            messages: {
+                namecontact: {
+                    required: "Nhập tên",
+                    minlength: "Lớn hơn 4 ký tự"
+                },
+                emailcontact: {
+                    required: "Nhập email",
+                    email: "Không đúng định dạng email"
+                },
+                messagecontact: {
+                    required: "Nhập nội dung",
+                    minlength: "Nội dung quá ngắn"
+                }
+            }
+        });
+    });
+</script>

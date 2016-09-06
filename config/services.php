@@ -27,12 +27,39 @@ $di->setShared('router', function () {
 
     $router->setDefaultModule('frontend');
     $router->setDefaultNamespace('Coredev\Frontend\Controllers');
+
     $router->add(
         '/quanly',
         array(
             'module' => 'backend',
             'namespace' => 'Coredev\Backend\Controllers',
             'controller' => 'login',
+            'action' => 'index'
+        )
+    );
+
+    $router->add(
+        "/posts/:params",
+        array(
+            'module' => 'frontend',
+            'controller' => 'posts',
+            'action' => 'detail',
+            'params' => 1
+        )
+    );
+    $router->add(
+        "/posts",
+        array(
+            'module' => 'frontend',
+            'controller' => 'posts',
+            'action' => 'index'
+        )
+    );
+    $router->add(
+        "/posts/",
+        array(
+            'module' => 'frontend',
+            'controller' => 'posts',
             'action' => 'index'
         )
     );

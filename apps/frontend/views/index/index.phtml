@@ -1,7 +1,21 @@
-<div class="page-header">
-    <h1>Congratulations!</h1>
+<div class="inner">
+    <header>
+        <h1>Công ty TNHH Đào tạo và Tư vấn Tâm Đức.</h1>
+        <p></p>
+    </header>
+    <section class="tiles">
+        <?php foreach ($data["posts"] as $item): ?>
+            <article class="style2">
+									<span class="image">
+										<img src="\<?php echo $item->avatar_image?>" alt=""/>
+									</span>
+                <a href="/posts/<?php echo $item->slug ?>">
+                    <h2><?php echo $item->title?></h2>
+                    <div class="content">
+                        <p><?php echo $item->content_short?></p>
+                    </div>
+                </a>
+            </article>
+        <?php endforeach; ?>
+    </section>
 </div>
-
-<p>You're now flying with Phalcon. Great things are about to happen!</p>
-
-<p>This page is located at <code>views/index/index.phtml</code></p>

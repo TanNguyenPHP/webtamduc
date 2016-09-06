@@ -158,7 +158,12 @@ class Posts extends Model
         //return $queryBuilder->getQuery()->execute();
         return $paginator->getPaginate();
     }
+    public static function findPosts($title = '', $is_home = '', $is_status = '')
+    {
+        $queryBuilder = new \Phalcon\Mvc\Model\Query\Builder(self::buildparams($title, $is_home, $is_status));
 
+        return $queryBuilder->getQuery()->execute();
+    }
     private static function buildparams($title, $is_home, $is_status)
     {
         $conditions = '1=1';
@@ -170,11 +175,11 @@ class Posts extends Model
             $conditions = $conditions . " and p.is_status = '$is_status'";
         return $params = array(
             'models' => array('p' => 'Coredev\Modeldb\Entity\Posts'),
-            'columns' => array('p.id', 'p.title', 'p.is_home', 'p.is_status', 'p.datecreate', 'c.name categoryname'),
+            'columns' => array('p.id', 'p.title', 'p.is_home', 'p.is_status','p.position', 'p.datecreate','p.avatar_image','p.slug','p.content_short' ,'c.name categoryname'),
             'joins' => array('0' => array('Coredev\Modeldb\Entity\Typespost', 'c.id = p.id_typespost', 'c', 'left')),
             'conditions' => $conditions,
             // or 'conditions' => "created > '2013-01-01' AND created < '2014-01-01'",
-            'order' => 'p.datecreate desc,p.title '
+            'order' => 'p.position'
             // or 'limit' => array(20, 20),
         );
     }

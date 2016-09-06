@@ -23,7 +23,8 @@ class Module implements ModuleDefinitionInterface
 
         $loader->registerNamespaces(array(
             'Coredev\Frontend\Controllers' => __DIR__ . '/controllers/',
-            'Coredev\Modeldb\Entity' => __DIR__ . '/models/',
+            'Coredev\Modeldb\Entity' => '../apps/modeldb/entity/',
+            'Coredev\Commons' => '../apps/commons/'
         ));
 
         $loader->register();

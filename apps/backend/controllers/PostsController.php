@@ -67,10 +67,7 @@ class PostsController extends ControllerBase
         $post->seo_desc = $this->request->getPost('seo_desc');
         $post->datecreate = date('YmdHis');
         $post->id_user = Di::getDefault()->getSession()->get('sessionUser');
-        $post->is_del = '0';
-        $post->is_status = '1';
-        $post->is_home = '1';
-
+        //$post->slug = UtilsSEO::CreateSlug($post->title) . '-' . date('YmdHis');
         try {
             if (isset($_FILES['avatar_image'])) {
                 if ($_FILES['avatar_image']['size'] != 0) {
@@ -83,15 +80,15 @@ class PostsController extends ControllerBase
                     $this->flash->error($message);
                 }
                 $this->dispatcher->forward(array(
-                    'controller' => "news",
-                    'action' => 'new'
+                    'controller' => "posts",
+                    'action' => 'index'
                 ));
             }
         } catch (Exception $e) {
             $this->flash->error(var_dump($e));
             $this->dispatcher->forward(array(
-                'controller' => "news",
-                'action' => 'new'
+                'controller' => "posts",
+                'action' => 'index'
             ));
         }
 
@@ -114,7 +111,7 @@ class PostsController extends ControllerBase
         $post->is_del = '0';
         $post->is_status = '1';
         $post->is_home = '1';
-        $post->slug = UtilsSEO::CreateSlug($post->title) . '-' . date('dmYHi');
+        $post->slug = UtilsSEO::CreateSlug($post->title) . '-' . date('YmdHis');
 
         try {
             $this::saveImg($_FILES['avatar_image']);

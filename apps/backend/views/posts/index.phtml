@@ -86,6 +86,7 @@ echo $this->tag->form(
                         <tr>
                             <th>Tiêu đề</th>
                             <th>Danh mục</th>
+                            <th>Vị trí</th>
                             <th>Trang chủ</th>
                             <th>Ngày tạo</th>
                             <th>Tình trạng</th>
@@ -96,6 +97,7 @@ echo $this->tag->form(
                             <tr bgcolor="#a9e5ff">
                                 <td><a href="/backend/posts/edit/<?php echo $item->id ?>"><?php echo $item->title ?></td>
                                 <td><?php echo $item->categoryname ?></td>
+                                <td><?php echo $item->position ?></td>
                                 <td style="text-align: center" class="posthome" data-id="<?php echo $item->id ?>">
                                     <?php if ($item->is_home == '1') : ?>
                                         <a class="delete-btn add-button-disable" href="#" disabled="disabled"><i
@@ -129,6 +131,7 @@ echo $this->tag->form(
                         <tr>
                             <th>Tiêu đề</th>
                             <th>Danh mục</th>
+                            <th>Vị trí</th>
                             <th>Trang chủ</th>
                             <th>Ngày tạo</th>
                             <th>Tình trạng</th>

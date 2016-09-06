@@ -1,7 +1,7 @@
 <?php echo $this->getContent(); ?>
 <section class="content-header">
     <h1>
-        Sửa bài viết
+        Bài viết mới
         <small>Version 1.0</small>
     </h1>
     <ol class="breadcrumb">
@@ -92,8 +92,8 @@
 <script>
     tinymce.init({
         selector: '#content',
-        plugins: "image imagetools",
-        toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'
+        plugins: ["image imagetools", 'emoticons template paste textcolor colorpicker textpattern imagetools'],
+        toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image print preview media | forecolor backcolor emoticons'
     });
     $('input[type="submit"]').prop("disabled", true);
     var a = 0;

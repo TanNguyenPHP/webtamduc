@@ -59,7 +59,7 @@ class PicturesController extends ControllerBase
                 else {
                     // Call handleUpload() with the name of the folder, relative to PHP's getcwd()
 
-                    $result = $uploader->handleUpload(str_replace("\\", "", params::pathfolderpicture));
+                    $result = $uploader->handleUpload(params::folderimg);
                     // To return a name used for uploaded file you can use the following line.
                     $result["uploadName"] = $uploader->getUploadName();
                     $pic = new Picture();
@@ -71,20 +71,20 @@ class PicturesController extends ControllerBase
                     $pic->dir = $result["target"];
                     $pic->is_show = '1';
                     if (!$pic->save())
-                        return $this->response->redirect('/backend/pictures/new');
+                        return $this->response->redirect('/backend/picture/new');
 
                 }
 
-                return json_encode($result);
+                return $this::sendJson($result);
             } // for delete file requests
             else if ($method == "DELETE") {
                 $result = $uploader->handleDelete("files");
-                return json_encode($result);
+                return $this::sendJson($result);
             } else {
                 header("HTTP/1.0 405 Method Not Allowed");
             }
         } catch (Exception $e) {
-            return $this->response->redirect('/backend/pictures/new');
+            return $this->response->redirect('/backend/picture/new');
         }
     }
     public function delAction()

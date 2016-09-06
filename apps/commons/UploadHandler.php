@@ -38,7 +38,7 @@ class UploadHandler
         $initialFiles = array();
 
         for ($i = 0; $i < 5000; $i++) {
-            array_push($initialFiles, array("name" => "name" . $i, uuid => "uuid" . $i, "thumbnailUrl" => "/test/dev/handlers/vendor/fineuploader/php-traditional-server/fu.png"));
+            array_push($initialFiles, array("name" => "name" + $i, uuid => "uuid" + $i, thumbnailUrl => "/test/dev/handlers/vendor/fineuploader/php-traditional-server/fu.png"));
         }
 
         return $initialFiles;
@@ -201,14 +201,16 @@ class UploadHandler
 
                 if (!is_dir(dirname($target))) {
                     mkdir(dirname($target));
+
                 }
+
                 if (move_uploaded_file($file['tmp_name'], $target)) {
                     return array('success' => true, "uuid" => $uuid, "target" => $target, 'name' => $filename);
                 }
             }
 
             return array('error' => 'Could not save uploaded file.' .
-                'The upload was cancelled, or server error encountered');
+                'The upload was cancelled, or server error encountered - '. $file['tmp_name'] .'--'. $target);
         }
     }
 
